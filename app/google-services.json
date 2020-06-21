@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "681667969345",
+    "firebase_url": "https://person-finder-76f3e.firebaseio.com",
+    "project_id": "person-finder-76f3e",
+    "storage_bucket": "person-finder-76f3e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:681667969345:android:8a70d7e14079155f2621c0",
+        "android_client_info": {
+          "package_name": "com.cloud9.personfinder"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "681667969345-092pj43u33c011nb1n8l40u8nebg8dhd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDctztLKwttO3HYZv6Slt6hyLun_jBI7WI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "681667969345-092pj43u33c011nb1n8l40u8nebg8dhd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

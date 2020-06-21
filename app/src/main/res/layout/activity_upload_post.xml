@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="15dp"
+    tools:context=".activity.UploadPostActivity">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/person_image"
+        android:layout_width="150dp"
+        android:layout_height="200dp"
+        android:layout_marginBottom="10dp"
+        android:padding="10dp"
+        android:src="@drawable/ic_launcher_foreground"
+        app:civ_border_color="#FF000000"
+        app:civ_border_width="0.5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/edt_PersonName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter Name of person"
+        android:inputType="textPersonName"
+        android:padding="5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/person_image" />
+
+    <EditText
+        android:id="@+id/edt_PersonAge"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter age of person"
+        android:inputType="number"
+        android:padding="5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/edt_PersonName" />
+
+    <EditText
+        android:id="@+id/edt_PersonAddress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter Residence Address of person"
+        android:inputType="textPostalAddress|text"
+        android:padding="5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/edt_PersonAge" />
+
+    <EditText
+        android:id="@+id/edt_PersonLostPlace"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter losting address/place of person "
+        android:inputType="text"
+        android:padding="5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/edt_PersonAddress" />
+
+    <EditText
+        android:id="@+id/edt_PersonCity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter city of person"
+        android:inputType="text"
+        android:padding="5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/edt_PersonLostPlace" />
+
+    <EditText
+        android:id="@+id/edt_PersonGuardianContactone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Number for contact"
+        android:inputType="number"
+        android:maxLength="13"
+        android:maxLines="1"
+        android:padding="5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/edt_PersonCity" />
+
+    <EditText
+        android:id="@+id/edt_PersonGuardianContacttwo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Another number to contact"
+        android:inputType="number"
+        android:maxLength="13"
+        android:maxLines="1"
+        android:padding="5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/edt_PersonGuardianContactone" />
+
+    <EditText
+        android:id="@+id/edt_PersonGuardianInstructions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter instructions/description/short note"
+        android:inputType="text|textMultiLine|textShortMessage"
+        android:padding="5dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/edt_PersonGuardianContacttwo" />
+
+    <Button
+        android:id="@+id/buttonSubmitPost"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="30dp"
+        android:text="Submit Post"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edt_PersonGuardianInstructions" />
+</androidx.constraintlayout.widget.ConstraintLayout>
