@@ -10,6 +10,8 @@ import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
@@ -33,6 +35,7 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -45,6 +48,8 @@ import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -148,10 +153,10 @@ public class UploadPostActivity extends AppCompatActivity {
         getValues();
 
         storageReference = FirebaseStorage.getInstance().getReference("Images");
-        dbreff = FirebaseDatabase.getInstance().getReference().child("posts");
-        if (uri != null){
+        dbreff = FirebaseDatabase.getInstance().getReference().child("Missing Person");
+        if (uri != null) {
             imageId = System.currentTimeMillis() + "." + getExtension(uri);
-        }else{
+        } else {
             Toast.makeText(this, "Please Select Image.", Toast.LENGTH_SHORT).show();
         }
         missingPersonsPost = new MissingPersonsPost(personName, personAge, personAddress, personLostPlace, personCity, personGuardianInstructions, personContactone, personContacttwo, imageId, personGuardianCnic, personGuardianLocation);
@@ -159,7 +164,7 @@ public class UploadPostActivity extends AppCompatActivity {
         if (uploadtask != null && uploadtask.isInProgress()) {
             Toast.makeText(this, "Post is uploading.", Toast.LENGTH_SHORT).show();
         } else {
-            dbreff.child(personUid).setValue(missingPersonsPost);
+            dbreff.child(personUid).push().setValue(missingPersonsPost);
             StorageReference reference = storageReference.child(imageId);
             uploadtask = reference.putFile(uri)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -271,63 +276,24 @@ public class UploadPostActivity extends AppCompatActivity {
     }
 
     private void getLastLocation() {
-        Task<Location> locationTask = fusedLocationProviderClient.getLastLocation();
+        fusedLocationProviderClient.getLastLocation()
+                .addOnCompleteListener(new OnCompleteListener<Location>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Location> task) {
+                        Location location = task.getResult();
+                        if (location != null) {
+                            try {
+                                Geocoder geocoder = new Geocoder(UploadPostActivity.this, Locale.getDefault());
+                                List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
 
-        locationTask.addOnSuccessListener(new OnSuccessListener<Location>() {
-            @Override
-            public void onSuccess(Location location) {
-                if (location != null) {
-                    //We have a location
-                    Log.d(TAG, "onSuccess: " + location.toString());
-                    Log.d(TAG, "onSuccess: " + location.getLatitude());
-                    Log.d(TAG, "onSuccess: " + location.getLongitude());
-                    tvLocation.setText("Latitude as: " + location.getLatitude() + "\n" + "Longitude as: " + location.getLongitude());
-                } else {
-                    Log.d(TAG, "onSuccess: Location was null...");
-                }
-            }
-        });
-
-        locationTask.addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.e(TAG, "onFailure: " + e.getLocalizedMessage());
-            }
-        });
-
-        //-------------------------------------------
-//        final LocationRequest locationRequest = new LocationRequest();
-//        locationRequest.setInterval(50000);
-//        locationRequest.setFastestInterval(3000);
-//        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-//
-//        LocationServices.getFusedLocationProviderClient(UploadPostActivity.this).requestLocationUpdates(locationRequest, new LocationCallback() {
-//            @Override
-//            public void onLocationResult(LocationResult locationResult) {
-//                super.onLocationResult(locationResult);
-//                LocationServices.getFusedLocationProviderClient(UploadPostActivity.this).removeLocationUpdates(this);
-//
-//                if (locationResult != null && locationResult.getLocations().size() > 0) {
-//                    int latestLocationIndex = locationResult.getLocations().size() - 1;
-//
-//                    double latitude = locationResult.getLocations().get(latestLocationIndex).getLatitude();
-//                    double longitude = locationResult.getLocations().get(latestLocationIndex).getLongitude();
-//                    String textLatLong;
-//                    textLatLong = String.format("Latitude as: %s\nLongitude as: %s",
-//                            latitude,
-//                            longitude
-//                    );
-//                    Log.d(TAG, "onLocationResult: \n" + textLatLong);
-//
-//                    Location location = new Location("providerNA");
-//                    location.setLatitude(latitude);
-//                    location.setLongitude(longitude);
-//                    fetchAddressFromLocation(location);
-//
-//                    //Toast.makeText(MainActivity.this, "" + location, Toast.LENGTH_LONG).show();
-//                    // Log.d(TAG, "onLocationResult: \n" + location);
-//                }
-//            }
-//        }, Looper.getMainLooper());
+                                tvLocation.setText("GPS Address: " + addresses.get(0).getAddressLine(0));
+                            } catch (IOException ex) {
+                                ex.printStackTrace();
+                            }
+                        } else {
+                            Toast.makeText(UploadPostActivity.this, "Unable to get your location.", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
     }
 }
