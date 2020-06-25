@@ -3,6 +3,8 @@
     package="com.cloud9.personfinder">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -11,7 +13,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.LogInActivity"
+        <activity android:name=".activity.ProfileActivity">
+
+        </activity>
+
+        <activity
+            android:name=".activity.LogInActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -19,16 +26,21 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+
         <activity
             android:name=".activity.SignUpActivity"
             android:screenOrientation="portrait">
 
         </activity>
+
         <activity
             android:name=".activity.UploadPostActivity"
             android:screenOrientation="portrait">
 
+
         </activity>
+
         <activity android:name=".MainActivity">
 
         </activity>

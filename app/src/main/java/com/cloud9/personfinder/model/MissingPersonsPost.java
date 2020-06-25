@@ -1,17 +1,20 @@
 package com.cloud9.personfinder.model;
 
 public class MissingPersonsPost {
-    String personName, personAge, personAddress, personCity,personInstructions, personContactone,personContacttwo, imageId ;
+    String personName, personAge, personAddress,personLostAddress, personCity,personInstructions, personContactone,personContacttwo, imageId ,personCnic, personLocation;
 
-    public MissingPersonsPost(String personName, String personAge, String personAddress, String personCity, String personInstructions, String personContactone, String personContacttwo, String imageId) {
+    public MissingPersonsPost(String personName, String personAge, String personAddress,String personLostAddress, String personCity, String personInstructions, String personContactone, String personContacttwo, String imageId, String personCnic, String personLocation) {
         this.personName = personName;
         this.personAge = personAge;
         this.personAddress = personAddress;
+        this.personLostAddress = personLostAddress;
         this.personCity = personCity;
         this.personInstructions = personInstructions;
         this.personContactone = personContactone;
         this.personContacttwo = personContacttwo;
         this.imageId = imageId;
+        this.personCnic = personCnic;
+        this.personLocation = personLocation;
     }
 
     public String getPersonName() {
@@ -36,6 +39,14 @@ public class MissingPersonsPost {
 
     public void setPersonAddress(String personAddress) {
         this.personAddress = personAddress;
+    }
+
+    public String getPersonLostAddress() {
+        return personLostAddress;
+    }
+
+    public void setPersonLostAddress(String personLostAddress) {
+        this.personLostAddress = personLostAddress;
     }
 
     public String getPersonCity() {
@@ -78,17 +89,19 @@ public class MissingPersonsPost {
         this.imageId = imageId;
     }
 
-    @Override
-    public String toString() {
-        return "MissingPersonsPost{" +
-                "personName='" + personName + '\'' +
-                ", personAge='" + personAge + '\'' +
-                ", personAddress='" + personAddress + '\'' +
-                ", personCity='" + personCity + '\'' +
-                ", personInstructions='" + personInstructions + '\'' +
-                ", personContactone='" + personContactone + '\'' +
-                ", personContacttwo='" + personContacttwo + '\'' +
-                ", imageId='" + imageId + '\'' +
-                '}';
+    public String getPersonCnic() {
+        return personCnic;
+    }
+
+    public void setPersonCnic(String personCnic) {
+        this.personCnic = personCnic;
+    }
+
+    public String getPersonLocation() {
+        return personLocation;
+    }
+
+    public void setPersonLocation(String personLocation) {
+        this.personLocation = personLocation;
     }
 }

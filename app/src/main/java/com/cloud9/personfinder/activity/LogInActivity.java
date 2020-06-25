@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,9 +27,10 @@ public class LogInActivity extends AppCompatActivity {
     private TextInputLayout textInputLayoutEmail, textInputLayoutPassword;
     private Button buttonLogin;
     private TextView tvMoveToSignup;
-
+    private ProgressBar progressBar;
     private String emailAddress, password;
     private FirebaseAuth mAuth;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +62,7 @@ public class LogInActivity extends AppCompatActivity {
     }
 
     private void userLogin() {
+        progressBar.setVisibility(View.VISIBLE);
         getDatefromViews();
 
         mAuth = FirebaseAuth.getInstance();
@@ -67,11 +70,15 @@ public class LogInActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if ((task.isSuccessful())) {
-                    Intent intent = new Intent(LogInActivity.this, MainActivity.class);
+                    progressBar.setVisibility(View.GONE);
+                    Intent intent = new Intent(LogInActivity.this, UploadPostActivity.class);
+                    intent.putExtra("personEmail", task.getResult().getUser().getEmail());
+                    intent.putExtra("personUid", task.getResult().getUser().getUid());
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
-                    Toast.makeText(LogInActivity.this, Objects.requireNonNull(Objects.requireNonNull(task.getResult()).getUser()).getPhoneNumber(), Toast.LENGTH_SHORT).show();
+                    finish();
                 } else {
+                    progressBar.setVisibility(View.GONE);
                     String message = Objects.requireNonNull(task.getException()).getMessage();
                     String cause = String.valueOf(task.getException().getCause());
                     Toast.makeText(LogInActivity.this, Objects.requireNonNull("Message is:  " + message + "\nCause is:  " + cause), Toast.LENGTH_SHORT).show();
@@ -90,5 +97,7 @@ public class LogInActivity extends AppCompatActivity {
 
         buttonLogin = findViewById(R.id.btnLogin);
         tvMoveToSignup = findViewById(R.id.tv_movetoSignup);
+
+        progressBar = findViewById(R.id.progress_login);
     }
 }

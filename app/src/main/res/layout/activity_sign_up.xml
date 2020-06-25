@@ -26,7 +26,7 @@
             android:hint="Email Address"
             android:inputType="textEmailAddress|text"
             android:maxLines="1"
-            app:layout_constraintBottom_toTopOf="@+id/et_password"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -51,6 +51,7 @@
             android:layout_height="match_parent"
             android:hint="Full Name"
             android:inputType="textPersonName"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
             android:maxLines="1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -58,31 +59,6 @@
             app:layout_constraintVertical_bias="0.0" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/til_UserName"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/til_UserFullname">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/et_UserName"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:hint="User Name"
-            android:inputType="text"
-            android:maxLength="8"
-            android:maxLines="1"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintVertical_bias="0.0" />
-    </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/til_UserAddress"
@@ -94,7 +70,7 @@
         android:layout_marginEnd="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/til_UserName">
+        app:layout_constraintTop_toBottomOf="@id/til_UserFullname">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_UserAddress"
@@ -103,6 +79,7 @@
             android:hint="Full Address"
             android:inputType="text"
             android:maxLines="1"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -128,6 +105,7 @@
             android:hint="City"
             android:inputType="text"
             android:maxLines="1"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -154,6 +132,7 @@
             android:inputType="textPassword|numberPassword"
             android:maxLength="10"
             android:maxLines="1"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -185,4 +164,16 @@
         android:padding="10dp"
         android:textColor="@color/cardview_dark_background"
         android:id="@+id/tv_movetoLogin"/>
+
+    <ProgressBar
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:id="@+id/progress_signup"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:padding="5dp"
+        android:layout_marginTop="5dp"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/tv_movetoLogin"
+        />
 </androidx.constraintlayout.widget.ConstraintLayout>
