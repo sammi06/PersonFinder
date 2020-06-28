@@ -1,9 +1,21 @@
 package com.cloud9.personfinder.model;
 
 public class MissingPersonsPost {
-    String personName, personAge, personAddress,personLostAddress, personCity,personInstructions, personContactone,personContacttwo, imageId ,personCnic, personLocation;
+    String personName, personAge, personAddress, personLostAddress, personCity, personInstructions, personContactone, personContacttwo, imageIdone, imageIdtwo, imageIdthree, personCnic, personLocation;
+        String uid;
 
-    public MissingPersonsPost(String personName, String personAge, String personAddress,String personLostAddress, String personCity, String personInstructions, String personContactone, String personContacttwo, String imageId, String personCnic, String personLocation) {
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
+
+    public MissingPersonsPost() {
+    }
+
+    public MissingPersonsPost(String personName, String personAge, String personAddress, String personLostAddress, String personCity, String personInstructions, String personContactone, String personContacttwo, String imageIdone, String imageIdtwo, String imageIdthree, String personCnic, String personLocation) {
         this.personName = personName;
         this.personAge = personAge;
         this.personAddress = personAddress;
@@ -12,7 +24,9 @@ public class MissingPersonsPost {
         this.personInstructions = personInstructions;
         this.personContactone = personContactone;
         this.personContacttwo = personContacttwo;
-        this.imageId = imageId;
+        this.imageIdone = imageIdone;
+        this.imageIdtwo = imageIdtwo;
+        this.imageIdthree = imageIdthree;
         this.personCnic = personCnic;
         this.personLocation = personLocation;
     }
@@ -81,12 +95,12 @@ public class MissingPersonsPost {
         this.personContacttwo = personContacttwo;
     }
 
-    public String getImageId() {
-        return imageId;
+    public String getImageIdone() {
+        return imageIdone;
     }
 
-    public void setImageId(String imageId) {
-        this.imageId = imageId;
+    public void setImageIdone(String imageIdone) {
+        this.imageIdone = imageIdone;
     }
 
     public String getPersonCnic() {
@@ -103,5 +117,21 @@ public class MissingPersonsPost {
 
     public void setPersonLocation(String personLocation) {
         this.personLocation = personLocation;
+    }
+
+    public String getImageIdtwo() {
+        return imageIdtwo;
+    }
+
+    public void setImageIdtwo(String imageIdtwo) {
+        this.imageIdtwo = imageIdtwo;
+    }
+
+    public String getImageIdthree() {
+        return imageIdthree;
+    }
+
+    public void setImageIdthree(String imageIdthree) {
+        this.imageIdthree = imageIdthree;
     }
 }

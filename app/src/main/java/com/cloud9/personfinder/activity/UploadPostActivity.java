@@ -15,15 +15,12 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.os.ResultReceiver;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,9 +28,6 @@ import android.widget.Toast;
 import com.cloud9.personfinder.R;
 import com.cloud9.personfinder.model.MissingPersonsPost;
 import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationCallback;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -55,7 +49,7 @@ import java.util.Objects;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class UploadPostActivity extends AppCompatActivity {
-    private CircleImageView circleImageViewPerson;
+    private CircleImageView circleImageViewPersonone, circleImageViewPersontwo, circleImageViewPersonthree;
     private TextInputEditText edtPersonName, edtPersonAge, edtPersonAddress, edtPersonLostPlace, edtPersonCity, edtPersonGuardianContactone, edtPersonGuardianContacttwo, edtPersonGuardianInstructions, edtPersonGuardianCNIC;
     private Button btnSubmitPost;
 
@@ -63,10 +57,16 @@ public class UploadPostActivity extends AppCompatActivity {
     ProgressBar progressBar;
     private String personName, personAge, personAddress, personLostPlace, personCity, personGuardianInstructions, personContactone, personContacttwo, personGuardianCnic, personGuardianLocation;
     private Bitmap bitmap;
-    String imageId;
-    private Uri uri;
+    private Bitmap bitmapTwo;
+    private Bitmap bitmapThree;
+    private String FirstimageId, SecondimageId, ThirdimageId;
+    private Uri uriOne;
+    private Uri uriTwo;
+    private Uri uriThree;
 
-    public static final int PICK_IMAGE = 1;
+    public static final int PICK_IMAGE_One = 1;
+    public static final int PICK_IMAGE_Two = 2;
+    public static final int PICK_IMAGE_Three = 3;
     private static final String TAG = "cvv";
 
     private StorageReference storageReference;
@@ -91,25 +91,31 @@ public class UploadPostActivity extends AppCompatActivity {
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
-        circleImageViewPerson.setOnClickListener(new View.OnClickListener() {
+        circleImageViewPersonone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                pickImage();
+                pickImageOne();
             }
         });
+        circleImageViewPersontwo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pickImageTwo();
+            }
+        });
+        circleImageViewPersonthree.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pickImageThree();
+            }
+        });
+
         btnSubmitPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 submitPost();
             }
         });
-    }
-
-    private void pickImage() {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE);
     }
 
     @Override
@@ -122,16 +128,61 @@ public class UploadPostActivity extends AppCompatActivity {
         }
     }
 
+    private void pickImageOne() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select First Picture.."), PICK_IMAGE_One);
+    }
+
+    private void pickImageTwo() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Second Picture.."), PICK_IMAGE_Two);
+    }
+
+    private void pickImageThree() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Third Picture.."), PICK_IMAGE_Three);
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PICK_IMAGE && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            uri = data.getData();
+        if (requestCode == PICK_IMAGE_One && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            uriOne = data.getData();
 
             try {
-                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uriOne);
                 // Log.d(TAG, String.valueOf(bitmap));
-                circleImageViewPerson.setImageBitmap(bitmap);
+                circleImageViewPersonone.setImageBitmap(bitmap);
+            } catch (IOException e) {
+                e.printStackTrace();
+                Log.e("cvv", e.toString());
+                Toast.makeText(this, "Something went wrong with image selection..", Toast.LENGTH_SHORT).show();
+            }
+        } else if (requestCode == PICK_IMAGE_Two && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            uriTwo = data.getData();
+
+            try {
+                bitmapTwo = MediaStore.Images.Media.getBitmap(getContentResolver(), uriTwo);
+                // Log.d(TAG, String.valueOf(bitmap));
+                circleImageViewPersontwo.setImageBitmap(bitmapTwo);
+            } catch (IOException e) {
+                e.printStackTrace();
+                Log.e("cvv", e.toString());
+                Toast.makeText(this, "Something went wrong with image selection..", Toast.LENGTH_SHORT).show();
+            }
+        } else if (requestCode == PICK_IMAGE_Three && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            uriThree = data.getData();
+
+            try {
+                bitmapThree = MediaStore.Images.Media.getBitmap(getContentResolver(), uriThree);
+                // Log.d(TAG, String.valueOf(bitmap));
+                circleImageViewPersonthree.setImageBitmap(bitmapThree);
             } catch (IOException e) {
                 e.printStackTrace();
                 Log.e("cvv", e.toString());
@@ -141,6 +192,7 @@ public class UploadPostActivity extends AppCompatActivity {
             Toast.makeText(this, "Image Error..", Toast.LENGTH_SHORT).show();
         }
     }
+
 
     private String getExtension(Uri uri) {
         ContentResolver cr = getContentResolver();
@@ -154,19 +206,36 @@ public class UploadPostActivity extends AppCompatActivity {
 
         storageReference = FirebaseStorage.getInstance().getReference("Images");
         dbreff = FirebaseDatabase.getInstance().getReference().child("Missing Person");
-        if (uri != null) {
-            imageId = System.currentTimeMillis() + "." + getExtension(uri);
+
+        if (uriOne != null) {
+            FirstimageId = System.currentTimeMillis() + "." + getExtension(uriOne);
+
+        } else if (uriTwo != null) {
+            SecondimageId = System.currentTimeMillis() + "." + getExtension(uriOne);
+
+        } else if (uriThree != null) {
+            ThirdimageId = System.currentTimeMillis() + "." + getExtension(uriOne);
+
         } else {
             Toast.makeText(this, "Please Select Image.", Toast.LENGTH_SHORT).show();
         }
-        missingPersonsPost = new MissingPersonsPost(personName, personAge, personAddress, personLostPlace, personCity, personGuardianInstructions, personContactone, personContacttwo, imageId, personGuardianCnic, personGuardianLocation);
+        missingPersonsPost = new MissingPersonsPost(personName, personAge, personAddress, personLostPlace, personCity, personGuardianInstructions, personContactone, personContacttwo, FirstimageId, SecondimageId, ThirdimageId, personGuardianCnic, personGuardianLocation);
 
         if (uploadtask != null && uploadtask.isInProgress()) {
             Toast.makeText(this, "Post is uploading.", Toast.LENGTH_SHORT).show();
         } else {
-            dbreff.child(personUid).push().setValue(missingPersonsPost);
-            StorageReference reference = storageReference.child(imageId);
-            uploadtask = reference.putFile(uri)
+            //adding uid + auto gen id with post
+           dbreff.child(personUid).push().setValue(missingPersonsPost);
+
+//            missingPersonsPost.setUid(personUid);
+//            dbreff.child(""+System.currentTimeMillis()).setValue(missingPersonsPost);
+            StorageReference referenceOne = storageReference.child(FirstimageId);
+           // StorageReference referenceTwo = storageReference.child(SecondimageId);
+          //  StorageReference referenceThree = storageReference.child(ThirdimageId);
+
+            uploadtask = referenceOne.putFile(uriOne)// image number one
+           // uploadtask = referenceTwo.putFile(uriTwo); image number two and three were making crash last night..
+         //   uploadtask = referenceThree.putFile(uriThree)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -189,7 +258,9 @@ public class UploadPostActivity extends AppCompatActivity {
     }
 
     private void clearControls() {
-        circleImageViewPerson.setImageResource(R.drawable.ic_launcher_foreground);
+        circleImageViewPersonone.setImageResource(R.drawable.ic_launcher_foreground);
+        circleImageViewPersontwo.setImageResource(R.drawable.ic_launcher_foreground);
+        circleImageViewPersonthree.setImageResource(R.drawable.ic_launcher_foreground);
 
         edtPersonGuardianCNIC.setText("");
         edtPersonName.setText("");
@@ -217,11 +288,12 @@ public class UploadPostActivity extends AppCompatActivity {
         personGuardianCnic = Objects.requireNonNull(edtPersonGuardianCNIC.getText()).toString();
 
         personGuardianLocation = tvLocation.getText().toString();
-
     }
 
     private void findingViews() {
-        circleImageViewPerson = findViewById(R.id.person_image);
+        circleImageViewPersonone = findViewById(R.id.person_imageone);
+        circleImageViewPersontwo = findViewById(R.id.person_imagetwo);
+        circleImageViewPersonthree = findViewById(R.id.person_imagethree);
 
         edtPersonName = findViewById(R.id.edt_PersonName);
         edtPersonAge = findViewById(R.id.edt_PersonAge);
