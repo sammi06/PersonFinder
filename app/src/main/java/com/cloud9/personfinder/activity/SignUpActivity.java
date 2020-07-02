@@ -66,58 +66,75 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void signUpUser() {
-        try {
-            progressBar.setVisibility(View.VISIBLE);
-            firebaseAuth = FirebaseAuth.getInstance();
-            rootNode = FirebaseDatabase.getInstance();
-            reference = rootNode.getReference("users");
-            getDatafromViews();
+        getDatafromViews();
 
-            userHelper = new UserHelper(fullName, fullAddress, cityName, useremail, password);
-            Log.d(TAG, "signUpUser: " + userHelper.toString());
+        if (useremail.isEmpty()) {
+            EditTextEmail.setError("Please Fill field");
+            EditTextEmail.requestFocus();
+        } else if (fullName.isEmpty()) {
+            EditTextname.setError("Please Fill field");
+            EditTextname.requestFocus();
+        } else if (fullAddress.isEmpty()) {
+            EditTextaddress.setError("Please Fill field");
+            EditTextaddress.requestFocus();
+        } else if (cityName.isEmpty()) {
+            EditTextcity.setError("Please Fill field");
+            EditTextcity.requestFocus();
+        } else if (password.isEmpty()) {
+            EditTextpassword.setError("Please Fill field");
+            EditTextpassword.requestFocus();
+        } else {
+            try {
+                progressBar.setVisibility(View.VISIBLE);
+                firebaseAuth = FirebaseAuth.getInstance();
+                rootNode = FirebaseDatabase.getInstance();
+                reference = rootNode.getReference("users");
 
-            firebaseAuth.createUserWithEmailAndPassword(useremail, password)
-                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            progressBar.setVisibility(View.GONE);
-                            if (task.isSuccessful()) {
-                                // Sign in success, update UI with the signed-in user's information
-                                Log.d(TAG, "signInWithEmail:success");
-                                FirebaseUser user = firebaseAuth.getCurrentUser();
-                                //updateUI(user);
+                userHelper = new UserHelper(fullName, fullAddress, cityName, useremail, password);
 
-                                if (user != null) {
-                                    reference.child(user.getUid()).setValue(userHelper).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                        @Override
-                                        public void onSuccess(Void aVoid) {
-                                            Toast.makeText(SignUpActivity.this, "Data of user Inserted Successfully", Toast.LENGTH_SHORT).show();
-                                            clearControls();
-                                        }
-                                    }).addOnFailureListener(new OnFailureListener() {
-                                        @Override
-                                        public void onFailure(@NonNull Exception e) {
-                                            String message = e.getMessage();
-                                            String cause = String.valueOf(e.getCause());
+                firebaseAuth.createUserWithEmailAndPassword(useremail, password)
+                        .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                progressBar.setVisibility(View.GONE);
+                                if (task.isSuccessful()) {
+                                    // Sign in success, update UI with the signed-in user's information
+                                    Log.d(TAG, "signInWithEmail:success");
+                                    FirebaseUser user = firebaseAuth.getCurrentUser();
+                                    //updateUI(user);
 
-                                            Toast.makeText(SignUpActivity.this, "Message is:  " + message + "\nCause is: " + cause, Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
+                                    if (user != null) {
+                                        reference.child(user.getUid()).setValue(userHelper).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                Toast.makeText(SignUpActivity.this, "Data of user Inserted Successfully", Toast.LENGTH_SHORT).show();
+                                                clearControls();
+                                            }
+                                        }).addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                String message = e.getMessage();
+                                                String cause = String.valueOf(e.getCause());
+
+                                                Toast.makeText(SignUpActivity.this, "Message is:  " + message + "\nCause is: " + cause, Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                                    }
+                                } else {
+                                    // If sign in fails, display a message to the user.
+                                    Log.w(TAG, "signInWithEmail:failure", task.getException());
+                                    Toast.makeText(SignUpActivity.this, "User Authentication failed. \n"+task.getException(),
+                                            Toast.LENGTH_LONG).show();
+                                    //updateUI(null);
                                 }
-                            } else {
-                                // If sign in fails, display a message to the user.
-                                Log.w(TAG, "signInWithEmail:failure", task.getException());
-                                Toast.makeText(SignUpActivity.this, "User Authentication failed.",
-                                        Toast.LENGTH_SHORT).show();
-                                //updateUI(null);
                             }
-                        }
-                    });
-        } catch (Exception ex) {
-            progressBar.setVisibility(View.GONE);
-            ex.printStackTrace();
-            Log.d("cvv", "signUpUser: " + ex);
-            Toast.makeText(this, "Something is wrong \n" + ex.getMessage() + "\nCause is: " + ex.getCause(), Toast.LENGTH_SHORT).show();
+                        });
+            } catch (Exception ex) {
+                progressBar.setVisibility(View.GONE);
+                ex.printStackTrace();
+                Log.d("cvv", "signUpUser: " + ex);
+                Toast.makeText(this, "Something is wrong \n" + ex.getMessage() + "\nCause is: " + ex.getCause(), Toast.LENGTH_SHORT).show();
+            }
         }
     }
 

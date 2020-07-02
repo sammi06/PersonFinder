@@ -78,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
                 .setQuery(query,MissingPersonsPost.class).build();
         Log.d("cvv", "getPostsData: "+options);
 
+        //TODO  unable to get data
         missingPersonsPostAdapter = new MissingPersonsPostAdapter(options);
         recyclerViewMissingPersonsPost = findViewById(R.id.rv_MissingPersonPosts);
         recyclerViewMissingPersonsPost.setHasFixedSize(true);

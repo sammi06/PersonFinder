@@ -62,29 +62,38 @@ public class LogInActivity extends AppCompatActivity {
     }
 
     private void userLogin() {
-        progressBar.setVisibility(View.VISIBLE);
         getDatefromViews();
-
-        mAuth = FirebaseAuth.getInstance();
-        mAuth.signInWithEmailAndPassword(emailAddress, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if ((task.isSuccessful())) {
-                    progressBar.setVisibility(View.GONE);
-                    Intent intent = new Intent(LogInActivity.this, UploadPostActivity.class);
-                    intent.putExtra("personEmail", task.getResult().getUser().getEmail());
-                    intent.putExtra("personUid", task.getResult().getUser().getUid());
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(intent);
-                    finish();
-                } else {
-                    progressBar.setVisibility(View.GONE);
-                    String message = Objects.requireNonNull(task.getException()).getMessage();
-                    String cause = String.valueOf(task.getException().getCause());
-                    Toast.makeText(LogInActivity.this, Objects.requireNonNull("Message is:  " + message + "\nCause is:  " + cause), Toast.LENGTH_SHORT).show();
+        if (emailAddress.isEmpty()) {
+            textInputEditTextEmail.setError("Please Fill field");
+            textInputEditTextEmail.requestFocus();
+        } else if (password.isEmpty()) {
+            textInputEditTextPassword.setError("Please Fill field");
+            textInputEditTextPassword.requestFocus();
+        } else {
+            progressBar.setVisibility(View.VISIBLE);
+            mAuth = FirebaseAuth.getInstance();
+            mAuth.signInWithEmailAndPassword(emailAddress, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+                    if ((task.isSuccessful())) {
+                        progressBar.setVisibility(View.GONE);
+                        Intent intent = new Intent(LogInActivity.this, UploadPostActivity.class);
+                        intent.putExtra("personEmail", task.getResult().getUser().getEmail());
+                        intent.putExtra("personUid", task.getResult().getUser().getUid());
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
+                        finish();
+                    } else {
+                        progressBar.setVisibility(View.GONE);
+                        String message = Objects.requireNonNull(task.getException()).getMessage();
+                        String cause = String.valueOf(task.getException().getCause());
+                        Toast.makeText(LogInActivity.this, Objects.requireNonNull("Message is:  " + message + "\nCause is:  " + cause),
+                                Toast.LENGTH_LONG).show();
+                    }
                 }
-            }
-        });
+            });
+        }
+
     }
 
 

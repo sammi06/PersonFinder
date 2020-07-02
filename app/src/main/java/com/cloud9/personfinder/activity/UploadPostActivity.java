@@ -79,7 +79,6 @@ public class UploadPostActivity extends AppCompatActivity {
     private int LOCATION_REQUEST_CODE = 10001;
 
     private FusedLocationProviderClient fusedLocationProviderClient;
-    private ResultReceiver resultReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,6 +113,13 @@ public class UploadPostActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 submitPost();
+            }
+        });
+
+        tvLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getLastLocation();
             }
         });
     }
@@ -201,59 +207,79 @@ public class UploadPostActivity extends AppCompatActivity {
     }
 
     private void submitPost() {
-        progressBar.setVisibility(View.VISIBLE);
         getValues();
-
-        storageReference = FirebaseStorage.getInstance().getReference("Images");
-        dbreff = FirebaseDatabase.getInstance().getReference().child("Missing Person");
-
-        if (uriOne != null) {
-            FirstimageId = System.currentTimeMillis() + "." + getExtension(uriOne);
-
-        } else if (uriTwo != null) {
-            SecondimageId = System.currentTimeMillis() + "." + getExtension(uriOne);
-
-        } else if (uriThree != null) {
-            ThirdimageId = System.currentTimeMillis() + "." + getExtension(uriOne);
-
+        if (personName.isEmpty()) {
+            edtPersonName.setError("Please fill this field");
+        } else if (personGuardianLocation.isEmpty()) {
+            getLastLocation();
+        } else if (personAge.isEmpty()) {
+            edtPersonAge.setError("Please fill this field");
+        } else if (personAddress.isEmpty()) {
+            edtPersonAddress.setError("Please fill this field");
+        } else if (personLostPlace.isEmpty()) {
+            edtPersonLostPlace.setError("Please fill this field");
+        } else if (personCity.isEmpty()) {
+            edtPersonCity.setError("Please fill this field");
+        } else if (personContactone.isEmpty()) {
+            edtPersonGuardianContactone.setError("Please fill this field");
+        } else if (personContacttwo.isEmpty()) {
+            edtPersonGuardianContacttwo.setError("Please fill this field");
+        } else if (personGuardianCnic.isEmpty()) {
+            edtPersonGuardianCNIC.setError("Please fill this field");
+        } else if (personGuardianInstructions.isEmpty()) {
+            edtPersonGuardianInstructions.setError("Please fill this field");
         } else {
-            Toast.makeText(this, "Please Select Image.", Toast.LENGTH_SHORT).show();
-        }
-        missingPersonsPost = new MissingPersonsPost(personName, personAge, personAddress, personLostPlace, personCity, personGuardianInstructions, personContactone, personContacttwo, FirstimageId, SecondimageId, ThirdimageId, personGuardianCnic, personGuardianLocation);
+            progressBar.setVisibility(View.VISIBLE);
+            storageReference = FirebaseStorage.getInstance().getReference("Images");
+            dbreff = FirebaseDatabase.getInstance().getReference().child("Missing Person");
 
-        if (uploadtask != null && uploadtask.isInProgress()) {
-            Toast.makeText(this, "Post is uploading.", Toast.LENGTH_SHORT).show();
-        } else {
-            //adding uid + auto gen id with post
-           dbreff.child(personUid).push().setValue(missingPersonsPost);
+            if (uriOne != null) {
+                FirstimageId = System.currentTimeMillis() + "." + getExtension(uriOne);
+
+            } else if (uriTwo != null) {
+                SecondimageId = System.currentTimeMillis() + "." + getExtension(uriOne);
+
+            } else if (uriThree != null) {
+                ThirdimageId = System.currentTimeMillis() + "." + getExtension(uriOne);
+
+            } else {
+                Toast.makeText(this, "Please Select Image.", Toast.LENGTH_SHORT).show();
+            }
+            missingPersonsPost = new MissingPersonsPost(personName, personAge, personAddress, personLostPlace, personCity, personGuardianInstructions, personContactone, personContacttwo, FirstimageId, SecondimageId, ThirdimageId, personGuardianCnic, personGuardianLocation);
+
+            if (uploadtask != null && uploadtask.isInProgress()) {
+                Toast.makeText(this, "Post is uploading.", Toast.LENGTH_SHORT).show();
+            } else {
+                //adding uid + auto gen id with post
+                dbreff.child(personUid).push().setValue(missingPersonsPost);
 
 //            missingPersonsPost.setUid(personUid);
 //            dbreff.child(""+System.currentTimeMillis()).setValue(missingPersonsPost);
-            StorageReference referenceOne = storageReference.child(FirstimageId);
-           // StorageReference referenceTwo = storageReference.child(SecondimageId);
-          //  StorageReference referenceThree = storageReference.child(ThirdimageId);
+                //TODO  multiple storages. getting crashon more imges
+                StorageReference referenceOne = storageReference.child(FirstimageId);
+                StorageReference referenceTwo = storageReference.child(SecondimageId);
+                StorageReference referenceThree = storageReference.child(ThirdimageId);
 
-            uploadtask = referenceOne.putFile(uriOne)// image number one
-           // uploadtask = referenceTwo.putFile(uriTwo); image number two and three were making crash last night..
-         //   uploadtask = referenceThree.putFile(uriThree)
-                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            progressBar.setVisibility(View.GONE);
-                            clearControls();
-                            Toast.makeText(getApplicationContext(), "Image and Post Uploaded Successfully ", Toast.LENGTH_LONG).show();
-//                    String ImageUploadId = dbreff.push().getKey();
-//                    dbreff.child(ImageUploadId).setValue(missingPersonsPost);
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.e(TAG, e.toString());
-                            progressBar.setVisibility(View.GONE);
-                            Toast.makeText(UploadPostActivity.this, "Failure \n" + e, Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                uploadtask = referenceOne.putFile(uriOne);// image number one
+                uploadtask = referenceTwo.putFile(uriTwo);//image number two and three were making crash last night..
+                uploadtask = referenceThree.putFile(uriThree)
+                        .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                progressBar.setVisibility(View.GONE);
+                                clearControls();
+                                Toast.makeText(getApplicationContext(), "Image and Post Uploaded Successfully ", Toast.LENGTH_LONG).show();
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.e(TAG, e.toString());
+                                progressBar.setVisibility(View.GONE);
+                                Toast.makeText(UploadPostActivity.this, "Failure \n" + e, Toast.LENGTH_SHORT).show();
+                            }
+                        });
+            }
         }
     }
 
@@ -361,9 +387,10 @@ public class UploadPostActivity extends AppCompatActivity {
                                 tvLocation.setText("GPS Address: " + addresses.get(0).getAddressLine(0));
                             } catch (IOException ex) {
                                 ex.printStackTrace();
+                                Toast.makeText(UploadPostActivity.this, ""+ex.getMessage(), Toast.LENGTH_SHORT).show();
                             }
                         } else {
-                            Toast.makeText(UploadPostActivity.this, "Unable to get your location.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(UploadPostActivity.this, "Unable to get your location.\n Please Turn your location on", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
