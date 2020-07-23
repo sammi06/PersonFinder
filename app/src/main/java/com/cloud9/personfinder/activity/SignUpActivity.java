@@ -26,6 +26,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.HashMap;
 import java.util.Objects;
 
 public class SignUpActivity extends AppCompatActivity {
@@ -34,9 +35,7 @@ public class SignUpActivity extends AppCompatActivity {
     private Button btnSignUp;
     private TextView tvMoveToLogin;
     private ProgressBar progressBar;
-
     private String fullName, cityName, password, fullAddress, useremail;
-
     private FirebaseDatabase rootNode;
     private DatabaseReference reference;
     private FirebaseAuth firebaseAuth;
@@ -102,9 +101,14 @@ public class SignUpActivity extends AppCompatActivity {
                                     Log.d(TAG, "signInWithEmail:success");
                                     FirebaseUser user = firebaseAuth.getCurrentUser();
                                     //updateUI(user);
-
+                                    HashMap<String,String> hashMap=new HashMap<>();
+                                    hashMap.put("Name",userHelper.getFullName());
+                                    hashMap.put("city",userHelper.getCity());
+                                    hashMap.put("email",userHelper.getEmail());
+                                    hashMap.put("address",userHelper.getFullAddress());
+                                    hashMap.put("pass",userHelper.getPassword());
                                     if (user != null) {
-                                        reference.child(user.getUid()).setValue(userHelper).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        reference.child(user.getUid()).setValue(hashMap).addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void aVoid) {
                                                 Toast.makeText(SignUpActivity.this, "Data of user Inserted Successfully", Toast.LENGTH_SHORT).show();

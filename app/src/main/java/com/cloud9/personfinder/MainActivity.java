@@ -13,8 +13,10 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.cloud9.personfinder.activity.ProfileActivity;
+//import com.cloud9.personfinder.adapter.MissingPersonsPostAdapter;
 import com.cloud9.personfinder.adapter.MissingPersonsPostAdapter;
 import com.cloud9.personfinder.model.MissingPersonsPost;
+//import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;

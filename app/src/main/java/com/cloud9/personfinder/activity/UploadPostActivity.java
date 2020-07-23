@@ -1,6 +1,7 @@
 package com.cloud9.personfinder.activity;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -10,6 +11,12 @@ import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.RectF;
+import android.graphics.drawable.BitmapDrawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -18,6 +25,7 @@ import android.os.Bundle;
 import android.os.ResultReceiver;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
@@ -33,6 +41,9 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.vision.Frame;
+import com.google.android.gms.vision.face.Face;
+import com.google.android.gms.vision.face.FaceDetector;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -41,7 +52,9 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -52,7 +65,6 @@ public class UploadPostActivity extends AppCompatActivity {
     private CircleImageView circleImageViewPersonone, circleImageViewPersontwo, circleImageViewPersonthree;
     private TextInputEditText edtPersonName, edtPersonAge, edtPersonAddress, edtPersonLostPlace, edtPersonCity, edtPersonGuardianContactone, edtPersonGuardianContacttwo, edtPersonGuardianInstructions, edtPersonGuardianCNIC;
     private Button btnSubmitPost;
-
     private TextView tvLocation;
     ProgressBar progressBar;
     private String personName, personAge, personAddress, personLostPlace, personCity, personGuardianInstructions, personContactone, personContacttwo, personGuardianCnic, personGuardianLocation;
@@ -177,6 +189,7 @@ public class UploadPostActivity extends AppCompatActivity {
                 bitmapTwo = MediaStore.Images.Media.getBitmap(getContentResolver(), uriTwo);
                 // Log.d(TAG, String.valueOf(bitmap));
                 circleImageViewPersontwo.setImageBitmap(bitmapTwo);
+                setUpFaceDetector(uriTwo);
             } catch (IOException e) {
                 e.printStackTrace();
                 Log.e("cvv", e.toString());
@@ -310,7 +323,6 @@ public class UploadPostActivity extends AppCompatActivity {
         personGuardianInstructions = Objects.requireNonNull(edtPersonGuardianInstructions.getText()).toString();
         personContactone = Objects.requireNonNull(edtPersonGuardianContactone.getText()).toString();
         personContacttwo = Objects.requireNonNull(edtPersonGuardianContacttwo.getText()).toString();
-
         personGuardianCnic = Objects.requireNonNull(edtPersonGuardianCNIC.getText()).toString();
 
         personGuardianLocation = tvLocation.getText().toString();
@@ -394,5 +406,60 @@ public class UploadPostActivity extends AppCompatActivity {
                         }
                     }
                 });
+    }
+    private void setUpFaceDetector(Uri Image) throws FileNotFoundException {
+        FaceDetector faceDetector=new FaceDetector.Builder(getApplicationContext())
+                .setTrackingEnabled(false)
+                .build();
+        if(!faceDetector.isOperational())
+        {
+            new AlertDialog.Builder(this).setMessage("Could not setup Face Detector").show();
+            return;
+        }
+        BitmapFactory.Options options=new BitmapFactory.Options();
+        options.inMutable=true;
+        InputStream stream=getContentResolver().openInputStream(Image);
+        Bitmap bitmap=BitmapFactory.decodeStream(stream);
+        Frame frame=new Frame.Builder().setBitmap(bitmap).build();
+        SparseArray<Face> faceSparseArray=faceDetector.detect(frame);
+        Log.d("TEST", "setUpFaceDetector: "+faceSparseArray.size());
+        detectedResponse(bitmap,faceSparseArray);
+    }
+
+    private void detectedResponse(Bitmap bitmap, SparseArray<Face> faceSparseArray) {
+        Paint paint=new Paint();
+        paint.setStrokeWidth(15);
+        paint.setColor(Color.RED);
+        paint.setStyle(Paint.Style.STROKE);
+        Bitmap TempBitmap= Bitmap.createBitmap(bitmap.getWidth(),bitmap.getHeight(),Bitmap.Config.RGB_565);
+        Canvas TempCanvas=new Canvas(TempBitmap);
+        TempCanvas.drawBitmap(bitmap,0,0,null);
+        for (int i=0;i<faceSparseArray.size();i++)
+        {
+            Face thisFace=faceSparseArray.valueAt(i);
+            float x1=thisFace.getPosition().x;
+            float y1=thisFace.getPosition().y;
+            float x2=x1+thisFace.getWidth();
+            float y2=y1+thisFace.getHeight();
+            /*if(thisFace.getId()==0)
+            {
+                Toast.makeText(reportmissing.this,"YES",Toast.LENGTH_SHORT).show();
+            }*/
+            TempCanvas.drawRoundRect(new RectF(x1,y1,x2,y2),2,2,paint);
+            circleImageViewPersontwo.setImageDrawable(new BitmapDrawable(getResources(),TempBitmap));
+            if(faceSparseArray.size()<1)
+            {
+                new AlertDialog.Builder(this).setMessage("'Error' No Face Detected").show();
+            }
+            else if (faceSparseArray.size()==1)
+            {
+                new AlertDialog.Builder(this).setMessage("1 Face Detected").show();
+                //flag_face=true;
+            }
+            else if(faceSparseArray.size()>1)
+            {
+                new AlertDialog.Builder(this).setMessage("'Error' More than 1 Face detected!").show();
+            }
+        }
     }
 }

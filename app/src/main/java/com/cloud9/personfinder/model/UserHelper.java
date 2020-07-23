@@ -2,7 +2,6 @@ package com.cloud9.personfinder.model;
 
 public class UserHelper {
     String fullName, fullAddress, city, email, password;
-
     public UserHelper(String fullName, String fullAddress, String city, String email, String password) {
         this.fullName = fullName;
         this.fullAddress = fullAddress;
