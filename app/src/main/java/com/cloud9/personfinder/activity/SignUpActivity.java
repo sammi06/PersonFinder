@@ -107,6 +107,7 @@ public class SignUpActivity extends AppCompatActivity {
                                     hashMap.put("email",userHelper.getEmail());
                                     hashMap.put("address",userHelper.getFullAddress());
                                     hashMap.put("pass",userHelper.getPassword());
+                                    hashMap.put("cell",userHelper.getPassword());
                                     if (user != null) {
                                         reference.child(user.getUid()).setValue(hashMap).addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override

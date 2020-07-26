@@ -11,6 +11,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.cloud9.personfinder.Homepage;
 import com.cloud9.personfinder.MainActivity;
 import com.cloud9.personfinder.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -30,7 +31,6 @@ public class LogInActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private String emailAddress, password;
     private FirebaseAuth mAuth;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +60,6 @@ public class LogInActivity extends AppCompatActivity {
         password = Objects.requireNonNull(textInputEditTextPassword.getText()).toString();
 
     }
-
     private void userLogin() {
         getDatefromViews();
         if (emailAddress.isEmpty()) {
@@ -77,10 +76,10 @@ public class LogInActivity extends AppCompatActivity {
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if ((task.isSuccessful())) {
                         progressBar.setVisibility(View.GONE);
-                        Intent intent = new Intent(LogInActivity.this, UploadPostActivity.class);
-                        intent.putExtra("personEmail", task.getResult().getUser().getEmail());
+                        Intent intent = new Intent(LogInActivity.this, Homepage.class);
+                        /*intent.putExtra("personEmail", task.getResult().getUser().getEmail());
                         intent.putExtra("personUid", task.getResult().getUser().getUid());
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);*/
                         startActivity(intent);
                         finish();
                     } else {
@@ -96,17 +95,13 @@ public class LogInActivity extends AppCompatActivity {
 
     }
 
-
     private void bindingViews() {
         textInputLayoutEmail = findViewById(R.id.til_LoginEmail);
         textInputLayoutPassword = findViewById(R.id.til_Loginpassword);
-
         textInputEditTextEmail = findViewById(R.id.et_LoginEmail);
         textInputEditTextPassword = findViewById(R.id.et_Loginpassword);
-
         buttonLogin = findViewById(R.id.btnLogin);
         tvMoveToSignup = findViewById(R.id.tv_movetoSignup);
-
         progressBar = findViewById(R.id.progress_login);
     }
 }

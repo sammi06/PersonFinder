@@ -14,10 +14,10 @@ import android.widget.Toast;
 
 import com.cloud9.personfinder.activity.ProfileActivity;
 //import com.cloud9.personfinder.adapter.MissingPersonsPostAdapter;
-import com.cloud9.personfinder.adapter.MissingPersonsPostAdapter;
+//import com.cloud9.personfinder.adapter.MissingPersonsPostAdapter;
 import com.cloud9.personfinder.model.MissingPersonsPost;
 //import com.firebase.ui.database.FirebaseRecyclerOptions;
-import com.firebase.ui.database.FirebaseRecyclerOptions;
+//import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -31,7 +31,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
-    private RecyclerView recyclerViewMissingPersonsPost;
+  /*  private RecyclerView recyclerViewMissingPersonsPost;
     private FirebaseAuth mAuth;
     private DatabaseReference databaseReference;
 
@@ -103,4 +103,6 @@ public class MainActivity extends AppCompatActivity {
         super.onStop();
         missingPersonsPostAdapter.stopListening();
     }
+}
+*/
 }
