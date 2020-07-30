@@ -1,6 +1,7 @@
 package com.cloud9.personfinder.activity;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -36,7 +37,8 @@ public class LogInActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_in);
-
+        ActionBar actionBar=getSupportActionBar();
+        actionBar.setTitle("Sign-in");
         bindingViews();
 
         buttonLogin.setOnClickListener(new View.OnClickListener() {
