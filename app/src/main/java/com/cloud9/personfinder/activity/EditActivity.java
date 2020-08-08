@@ -39,7 +39,6 @@ public class EditActivity extends AppCompatActivity {
     private String fullName, cityName, password, fullAddress, useremail;
     private Button btnSignUp;
     private ProgressBar progressBar;
-    private static final String TAG = "EditActivity";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,7 +83,6 @@ public class EditActivity extends AppCompatActivity {
         reference.child("city").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                //Toast.makeText(EditActivity.this,""+dataSnapshot.getValue(String.class),Toast.LENGTH_SHORT).show();
                 cityName = dataSnapshot.getValue(String.class);
                 EditTextcity.setText(cityName);
             }
