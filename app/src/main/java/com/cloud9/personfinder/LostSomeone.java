@@ -5,9 +5,14 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.content.ContentResolver;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -18,6 +23,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
@@ -75,6 +81,7 @@ public class LostSomeone extends AppCompatActivity {
         setContentView(R.layout.activity_lost_someone);
         ActionBar actionBar=getSupportActionBar();
         actionBar.setTitle("Lost Someone");
+
         map_location=(TextView)findViewById(R.id.maptxt);
         name=(EditText)findViewById(R.id.name);
         age=(EditText)findViewById(R.id.age);
