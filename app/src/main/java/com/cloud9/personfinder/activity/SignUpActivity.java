@@ -42,7 +42,6 @@ public class SignUpActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     private String TAG = "cvv";
     private UserHelper userHelper;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,9 +89,7 @@ public class SignUpActivity extends AppCompatActivity {
                 firebaseAuth = FirebaseAuth.getInstance();
                 rootNode = FirebaseDatabase.getInstance();
                 reference = rootNode.getReference("users");
-
                 userHelper = new UserHelper(fullName, fullAddress, cityName, useremail, password);
-
                 firebaseAuth.createUserWithEmailAndPassword(useremail, password)
                         .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                             @Override
@@ -109,7 +106,6 @@ public class SignUpActivity extends AppCompatActivity {
                                     hashMap.put("email",userHelper.getEmail());
                                     hashMap.put("address",userHelper.getFullAddress());
                                     hashMap.put("pass",userHelper.getPassword());
-                                    hashMap.put("cell",userHelper.getPassword());
                                     if (user != null) {
                                         reference.child(user.getUid()).setValue(hashMap).addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
@@ -181,11 +177,8 @@ public class SignUpActivity extends AppCompatActivity {
         EditTextaddress = findViewById(R.id.et_UserAddress);
         EditTextcity = findViewById(R.id.et_UserCity);
         EditTextpassword = findViewById(R.id.et_UserPassword);
-
         btnSignUp = findViewById(R.id.buttonSignUp);
-
         tvMoveToLogin = findViewById(R.id.tv_movetoLogin);
-
         progressBar = findViewById(R.id.progress_signup);
     }
 }

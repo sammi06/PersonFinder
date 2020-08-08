@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import com.cloud9.personfinder.activity.EditActivity;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -25,7 +26,7 @@ public class Homepage extends AppCompatActivity {
     FirebaseDatabase mFirebaseDatabase;
     DatabaseReference mRef,like;
     Boolean isopen;
-    FloatingActionButton mMainAddFab;
+    FloatingActionButton mMainAddFab,edit;
     TextView mAddUserText,mAddContactText,madd_user_text;
     Boolean liker=false;
     String postkey;
@@ -39,6 +40,14 @@ public class Homepage extends AppCompatActivity {
         mFirebaseDatabase=FirebaseDatabase.getInstance();
         mRef=mFirebaseDatabase.getReference("ImageMissing");//Enter path of DB............
         mMainAddFab=findViewById(R.id.main_add_fab);
+        edit=findViewById(R.id.edit);
+        edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(Homepage.this, EditActivity.class);
+                startActivity(intent);
+            }
+        });
         mAddUserText=findViewById(R.id.add_user_text);
         mAddContactText=findViewById(R.id.add_contact_text);
         madd_user_text=findViewById(R.id.add_user_text2);

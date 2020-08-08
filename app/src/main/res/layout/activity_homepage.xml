@@ -82,5 +82,23 @@
         app:layout_constraintBottom_toBottomOf="@+id/add_contact_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/container_layout"
+        app:layout_constraintEnd_toEndOf="parent">
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/edit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="32dp"
+            android:clickable="true"
+            android:src="@drawable/ic_launcher_edit_foreground"
+            android:text="Add Data"
+            app:backgroundTint="@color/colorAccent"
+            app:fabSize="normal"
+            app:rippleColor="@color/colorPrimaryDark" />
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
